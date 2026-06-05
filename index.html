@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인생역전 AI 사주</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background: linear-gradient(135deg, #f4f1ea 0%, #e8e4db 100%);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            max-width: 500px;
+            width: 100%;
+            border: 3px solid #d4af37;
+        }
+
+        h1 {
+            color: #8a1d1d;
+            margin-bottom: 5px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        p.subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Malgun Gothic', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #8a1d1d;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 13px;
+            background-color: #8a1d1d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #6e1616;
+        }
+
+        button.secondary {
+            background-color: #999;
+        }
+
+        button.secondary:hover {
+            background-color: #777;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #fdfbf7 0%, #f9f6f0 100%);
+            border-radius: 12px;
+            border: 2px solid #d4af37;
+            display: none;
+        }
+
+        .result-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #8a1d1d;
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d4af37;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #d4af37;
+        }
+
+        .result-item strong {
+            color: #8a1d1d;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .result-item span {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .calendar-info {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>☯️ 사주 풀이</h1>
+    <p class="subtitle">당신의 타고난 운명과 오행을 분석해 드립니다.</p>
+    
+    <div class="form-group">
+        <label for="name">이름</label>
+        <input type="text" id="name" placeholder="홍길동">
+    </div>
+    
+    <div class="form-group">
+        <label for="calendar-type">달력 종류</label>
+        <select id="calendar-type">
+            <option value="solar">양력</option>
+            <option value="lunar">음력</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="birthdate">생년월일</label>
+        <input type="date" id="birthdate">
+    </div>
+    
+    <div class="form-group">
+        <label for="birthtime">출생 시간 (12시간 기준)</label>
+        <select id="birthtime">
+            <option value="unknown">모름</option>
+            <option value="자시">자시 (23:30 ~ 01:30)</option>
+            <option value="축시">축시 (01:30 ~ 03:30)</option>
+            <option value="인시">인시 (03:30 ~ 05:30)</option>
+            <option value="묘시">묘시 (05:30 ~ 07:30)</option>
+            <option value="진시">진시 (07:30 ~ 09:30)</option>
+            <option value="사시">사시 (09:30 ~ 11:30)</option>
+            <option value="오시">오시 (11:30 ~ 13:30)</option>
+            <option value="미시">미시 (13:30 ~ 15:30)</option>
+            <option value="신시">신시 (15:30 ~ 17:30)</option>
+            <option value="유시">유시 (17:30 ~ 19:30)</option>
+            <option value="술시">술시 (19:30 ~ 21:30)</option>
+            <option value="해시">해시 (21:30 ~ 23:30)</option>
+        </select>
+    </div>
+    
+    <div class="button-group">
+        <button onclick="analyzeSaju()">🔮 운세 보기</button>
+        <button class="secondary" onclick="clearForm()">초기화</button>
+    </div>
+    
+    <div id="result">
+        <div class="result-title" id="res-name"></div>
+        
+        <div class="result-item">
+            <strong>주요 오행</strong>
+            <span id="res-element"></span>
+        </div>
+
+        <div class="result-item">
+            <strong>타고난 성향</strong>
+            <span id="res-personality"></span>
+        </div>
+
+        <div class="result-item">
+            <strong>재물운</strong>
+            <span id="res-wealth"></span>
+        </div>
+
+        <div class="result-item">
+            <strong>연애운</strong>
+            <span id="res-love"></span>
+        </div>
+
+        <div class="result-item">
+            <strong>학업운</strong>
+            <span id="res-study"></span>
+        </div>
+
+        <div class="result-item">
+            <strong>대운 (앞으로의 운세)</strong>
+            <span id="res-destiny"></span>
+        </div>
+
+        <div class="result-item">
+            <strong>총운 평가</strong>
+            <span id="res-overall"></span>
+        </div>
+
+        <div class="result-item">
+            <strong>💡 조언</strong>
+            <span id="res-advice"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function analyzeSaju() {
+        const name = document.getElementById('name').value || "이름없음";
+        const birthdate = document.getElementById('birthdate').value;
+        const calendarType = document.getElementById('calendar-type').value;
+        
+        if (!birthdate) {
+            alert("생년월일을 입력해주세요!");
+            return;
+        }
+
+        // 사용할 날짜 결정
+        const date = new Date(birthdate);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+
+        // 오행 데이터
+        const elements = [
+            { name: "木(나무)", color: "초록색", trait: "성장과 명예, 신선함" },
+            { name: "火(불)", color: "빨간색", trait: "열정과 표현력, 활기" },
+            { name: "土(흙)", color: "황색", trait: "신용과 포용력, 안정" },
+            { name: "金(금)", color: "흰색", trait: "결단력과 정의, 명확" },
+            { name: "水(물)", color: "검은색", trait: "지혜와 유연함, 깊이" }
+        ];
+
+        const personalities = [
+            "리더십이 강하고 독립적인 성향입니다. 새로운 일에 도전하는 것을 즐기며, 성장을 추구합니다.",
+            "사교성이 좋고 활기찬 성격입니다. 감정 표현이 솔직하여 주변에 사람이 많고, 긍정적입니다.",
+            "성실하고 묵묵하게 자기 일을 해내는 타입입니다. 타인에게 신뢰를 주며, 안정감을 추구합니다.",
+            "원칙을 중요시하며 맺고 끊음이 확실합니다. 집중력이 매우 뛰어나고, 정직함을 중요하게 생각합니다.",
+            "생각이 깊고 지혜로우며 임기응변에 강합니다. 예술적 감각이 발달했고, 창의력이 뛰어납니다."
+        ];
+
+        const wealths = [
+            "젊은 시절 고생이 있으나, 30대 후반부터 재물이 쌓이는 대기만성형입니다. 인내심이 중요합니다.",
+            "돈을 버는 능력이 탁월하나 나가는 돈도 많으니 자산 관리에 신경 써야 합니다.",
+            "평생 먹고 살 걱정이 없는 안정적인 재물운을 타고났습니다. 지속적인 성장이 가능합니다.",
+            "횡재수가 있어 투자나 사업에서 큰 성과를 거둘 수 있는 운입니다. 신중함이 필요합니다.",
+            "인복이 곧 재물입니다. 주변 사람을 통해 큰 기회를 얻게 될 운명입니다."
+        ];
+
+        const loves = [
+            "진지하고 책임감 있는 연애를 추구합니다. 한 사람을 오래 사랑하는 편이며, 깊은 관계를 원합니다.",
+            "밝고 따뜻한 매력으로 이성의 마음을 사로잡습니다. 연애가 활발하며, 설레는 감정을 즐깁니다.",
+            "차분하고 안정적인 연애를 좋아합니다. 결혼 운이 좋으며, 가정을 소중히 여깁니다.",
+            "까다로운 기준을 가지고 있지만, 선택한 사람에게는 충실합니다. 진실한 관계를 원합니다.",
+            "로맨틱하고 섬세한 연애를 하는 타입입니다. 감정 교감을 중시하며, 예민한 편입니다."
+        ];
+
+        const studies = [
+            "학습 능력이 우수하고, 꾸준한 노력으로 좋은 성과를 거둡니다. 리더십 기반의 학습이 효과적입니다.",
+            "이해력이 빠르고 문제 해결 능력이 뛰어납니다. 다양한 분야의 학습에 관심을 보입니다.",
+            "기초를 탄탄히 다지는 학습 방식이 효과적입니다. 시간이 걸리지만, 확실한 성과를 낼 수 있습니다.",
+            "집중력이 뛰어나 전문 분야 학습에 강점이 있습니다. 깊이 있는 학습을 선호합니다.",
+            "창의적 사고력이 우수하고, 이론보다 실전에서 빛을 발합니다. 자유로운 학습 방식이 좋습니다."
+        ];
+
+        const destinies = [
+            "2030년대 중반부터 운이 크게 좋아집니다. 젊은 시절의 노력이 결실을 맺는 시기입니다.",
+            "앞으로 10년은 기회의 시간입니다. ��의주가 강하니 과감한 도전을 권장합니다.",
+            "꾸준한 상승세가 계속될 것으로 보입니다. 작은 변화에 흔들리지 마세요.",
+            "5년 단위로 운이 변합니다. 중요한 결정은 신중히 하세요.",
+            "인복이 계속 좋아질 것으로 예상됩니다. 관계를 잘 관리하면 큰 성공을 이룰 수 있습니다."
+        ];
+
+        const overalls = [
+            "⭐⭐⭐⭐ - 상당히 좋은 운을 타고났습니다. 노력과 함께라면 성공 가능성이 높습니다.",
+            "⭐⭐⭐⭐⭐ - 매우 우수한 운입니다. 적극적인 활동으로 큰 성과를 거둘 수 있습니다.",
+            "⭐⭐⭐⭐ - 안정적이고 행운이 따릅니다. 신뢰와 성실함으로 인생이 잘 풀릴 것입니다.",
+            "⭐⭐⭐⭐⭐ - 타고난 운이 매우 좋습니다. 의지와 노력만 더하면 큰 성취를 이룰 것입니다.",
+            "⭐⭐⭐⭐ - 좋은 인복과 창의력으로 독특한 길을 걸을 수 있습니다."
+        ];
+
+        const advices = [
+            "고집을 조금만 내려놓으면 대인관계가 훨씬 평탄해집니다. 유연한 사고를 가지세요.",
+            "충동적인 소비를 줄이고 장기적인 계획을 세우세요. 순간의 열정을 조절하는 것이 성공의 열쇠입니다.",
+            "너무 신중하다가 기회를 놓칠 수 있으니 때로는 과감해지세요. 변화를 두려워하지 마세요.",
+            "완벽주의 성향을 조금 완화하면 관계가 더 부드러워집니다. 다른 사람의 의견도 존중하세요.",
+            "직관을 믿되, 중요한 결정은 충분한 정보 수집 후에 하세요. 감정과 이성의 균형을 맞추세요."
+        ];
+
+        // 날짜 기반 인덱스
+        const idx = day % 5;
+
+        // 결과 반영
+        const calendarLabel = calendarType === 'solar' ? '(양력)' : '(음력)';
+        document.getElementById('res-name').innerText = `✨ ${name}님의 사주 분석 결과 ${calendarLabel}`;
+        document.getElementById('res-element').innerText = `${elements[idx].name} - ${elements[idx].trait}`;
+        document.getElementById('res-personality').innerText = personalities[idx];
+        document.getElementById('res-wealth').innerText = wealths[idx];
+        document.getElementById('res-love').innerText = loves[idx];
+        document.getElementById('res-study').innerText = studies[idx];
+        document.getElementById('res-destiny').innerText = destinies[idx];
+        document.getElementById('res-overall').innerText = overalls[idx];
+        document.getElementById('res-advice').innerText = advices[idx];
+        
+        // 결과창 보이기
+        document.getElementById('result').style.display = 'block';
+        
+        // 결과로 스크롤
+        setTimeout(() => {
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    }
+
+    function clearForm() {
+        document.getElementById('name').value = '';
+        document.getElementById('birthdate').value = '';
+        document.getElementById('calendar-type').value = 'solar';
+        document.getElementById('birthtime').value = 'unknown';
+        document.getElementById('result').style.display = 'none';
+    }
+
+    // 엔터 키로도 실행 가능
+    document.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            analyzeSaju();
+        }
+    });
+</script>
+
+</body>
+</html>
