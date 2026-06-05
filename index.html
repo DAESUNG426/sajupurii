@@ -142,16 +142,6 @@
             color: #555;
             line-height: 1.6;
         }
-
-        .calendar-info {
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 6px;
-            margin-top: 10px;
-            font-size: 13px;
-            color: #666;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -258,12 +248,10 @@
             return;
         }
 
-        // 사용할 날짜 결정
         const date = new Date(birthdate);
         const day = date.getDate();
         const month = date.getMonth() + 1;
 
-        // 오행 데이터
         const elements = [
             { name: "木(나무)", color: "초록색", trait: "성장과 명예, 신선함" },
             { name: "火(불)", color: "빨간색", trait: "열정과 표현력, 활기" },
@@ -306,7 +294,7 @@
 
         const destinies = [
             "2030년대 중반부터 운이 크게 좋아집니다. 젊은 시절의 노력이 결실을 맺는 시기입니다.",
-            "앞으로 10년은 기회의 시간입니다. ��의주가 강하니 과감한 도전을 권장합니다.",
+            "앞으로 10년은 기회의 시간입니다. 신의주가 강하니 과감한 도전을 권장합니다.",
             "꾸준한 상승세가 계속될 것으로 보입니다. 작은 변화에 흔들리지 마세요.",
             "5년 단위로 운이 변합니다. 중요한 결정은 신중히 하세요.",
             "인복이 계속 좋아질 것으로 예상됩니다. 관계를 잘 관리하면 큰 성공을 이룰 수 있습니다."
@@ -328,10 +316,8 @@
             "직관을 믿되, 중요한 결정은 충분한 정보 수집 후에 하세요. 감정과 이성의 균형을 맞추세요."
         ];
 
-        // 날짜 기반 인덱스
         const idx = day % 5;
 
-        // 결과 반영
         const calendarLabel = calendarType === 'solar' ? '(양력)' : '(음력)';
         document.getElementById('res-name').innerText = `✨ ${name}님의 사주 분석 결과 ${calendarLabel}`;
         document.getElementById('res-element').innerText = `${elements[idx].name} - ${elements[idx].trait}`;
@@ -343,10 +329,8 @@
         document.getElementById('res-overall').innerText = overalls[idx];
         document.getElementById('res-advice').innerText = advices[idx];
         
-        // 결과창 보이기
         document.getElementById('result').style.display = 'block';
         
-        // 결과로 스크롤
         setTimeout(() => {
             document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 100);
@@ -360,7 +344,6 @@
         document.getElementById('result').style.display = 'none';
     }
 
-    // 엔터 키로도 실행 가능
     document.addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
             analyzeSaju();
